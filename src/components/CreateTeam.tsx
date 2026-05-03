@@ -32,13 +32,13 @@ export function CreateTeam() {
       <h1>Marian 30v synttärisuunnistus</h1>
       <div className="story-text">
         <p>
-          Maria on menettänyt muistinsa eikä muista enää mitään — ei edes kuka hän on. Jäljellä on vain hataria muistikuvia, jotka on ripoteltu ympäri Mäkkylänmetsää.
+          Maria oli eilen kävelyllä Mäkkylänmetsässä. Metsässä Maria näki suuren mäyrän ja lähti innoissaan juoksemaan sen perään. Maria kuitenkin kompastui juurakkoon ja löi päänsä. Tämän vuoksi Maria on menettänyt muistinsa eikä muista enää edes kuka hän on. Jäljellä on vain hataria muistikuvia, jotka on ripoteltu ympäri Mäkkylänmetsää.
         </p>
         <p>
-          Asettukaamme kaikki hetkeksi Marian saappaisiin ja autetaan häntä palauttamaan mieleensä kuka hän on. Jokaisella rastilla odottaa muistinpalanen — kysymys, jonka oikea vastaus palauttaa osan Marian identiteetistä. Väärä vastaus hämärtää muiston ja se pakenee uuteen paikkaan.
+          Asettukaamme kaikki hetkeksi Marian saappaisiin ja auttakaamme häntä palauttamaan mieleensä kuka hän on. Jokaisella rastilla odottaa muistinpalanen - kysymys, jonka oikea vastaus palauttaa osan Marian identiteetistä. Väärä vastaus hämärtää muiston ja se pakenee uuteen paikkaan.
         </p>
         <p>
-          Mitä enemmän muistoja palautatte, sitä lähemmäs pääsette selvittämään minne Maria on kadottanut jotain tärkeää. Kerätkää joukkue ja suuntatkaa metsään — nopein joukkue palkitaan!
+          Mitä enemmän muistoja palautatte, sitä lähemmäs pääsette selvittämään minne Maria on kadottanut jotain tärkeää. Kerätkää joukkue ja suunnatkaa metsään - nopein joukkue palkitaan!
         </p>
       </div>
       <form onSubmit={handleSubmit}>
