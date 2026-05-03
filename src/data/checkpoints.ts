@@ -40,7 +40,7 @@ export const CHECKPOINTS: Checkpoint[] = [
   },
   {
     id: '5', name: 'Rasti 5',
-    lat: 60.22425405648699, lng: 24.8324789188986,
+    lat: 60.22394105648699, lng: 24.8331099188986,
     trivia: {
       question: 'Koska on minun syntymäpäiväni?',
       options: ['6.5.', '3.5.', '9.5.'],
