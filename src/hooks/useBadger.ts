@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { getBadgerPosition, moveBadgerToward } from '../data/badger';
 
 const TICK_MS = 2000;
@@ -18,7 +18,6 @@ export function useBadger({ playerPosition, isBloodlusted }: UseBadgerOptions) {
   useEffect(() => {
     const interval = setInterval(() => {
       if (isBloodlusted && playerPosition) {
-        // If just entered bloodlust, snap to current patrol position first
         if (!wasBloodlusted.current) {
           posRef.current = getBadgerPosition(Date.now());
           wasBloodlusted.current = true;
@@ -37,5 +36,15 @@ export function useBadger({ playerPosition, isBloodlusted }: UseBadgerOptions) {
     return () => clearInterval(interval);
   }, [isBloodlusted, playerPosition]);
 
-  return { badgerPosition };
+  const teleportToPlayer = useCallback(() => {
+    if (playerPosition) {
+      // Place badger 15m from player (within catch radius)
+      const offset = 0.00013; // ~15m
+      const newPos = { lat: playerPosition.lat + offset, lng: playerPosition.lng };
+      posRef.current = newPos;
+      setBadgerPosition(newPos);
+    }
+  }, [playerPosition]);
+
+  return { badgerPosition, teleportToPlayer };
 }

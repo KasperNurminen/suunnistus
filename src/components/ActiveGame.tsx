@@ -22,7 +22,7 @@ export function ActiveGame() {
   const immuneRemaining = state.badgerImmunityUntil ? Math.max(0, state.badgerImmunityUntil - Date.now()) : 0;
   const isImmune = immuneRemaining > 0;
   const isBloodlusted = state.collectedCheckpoints.length >= BLOODLUST_THRESHOLD && !isImmune;
-  const { badgerPosition } = useBadger({ playerPosition: position, isBloodlusted });
+  const { badgerPosition, teleportToPlayer } = useBadger({ playerPosition: position, isBloodlusted });
   const [elapsed, setElapsed] = useState(0);
   const [lastCollected, setLastCollected] = useState<string | null>(null);
   const lastCollectedTimer = useRef<ReturnType<typeof setTimeout>>();
@@ -208,6 +208,12 @@ export function ActiveGame() {
           );
         })}
       </ul>
+
+      {import.meta.env.DEV && (
+        <button className="btn-dev" onClick={teleportToPlayer} style={{ marginTop: '1rem', width: '100%' }}>
+          DEV: Teleport badger to me
+        </button>
+      )}
 
       <button
         className="btn-reset"
