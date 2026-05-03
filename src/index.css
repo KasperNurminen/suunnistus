@@ -39,6 +39,18 @@ h2 {
   margin-bottom: 2rem;
 }
 
+.story-text {
+  color: #94a3b8;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  width: 100%;
+}
+
+.story-text p {
+  margin-bottom: 0.75rem;
+}
+
 /* Forms */
 form {
   width: 100%;

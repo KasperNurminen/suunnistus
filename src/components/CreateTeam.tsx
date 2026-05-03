@@ -30,6 +30,18 @@ export function CreateTeam() {
   return (
     <div className="screen">
       <h1>Marian 30v synttärisuunnistus</h1>
+      <div className="story-text">
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum
+          auctor nisi vel magna tincidunt, in fermentum libero gravida. Sed
+          malesuada justo at risus cursus, vel facilisis nulla ultrices.
+        </p>
+        <p>
+          Pellentesque habitant morbi tristique senectus et netus et malesuada
+          fames ac turpis egestas. Integer vel velit in odio posuere blandit
+          eget nec arcu. Cras pharetra lorem a lectus consequat viverra.
+        </p>
+      </div>
       <form onSubmit={handleSubmit}>
         <div className="field">
           <label htmlFor="teamName">Joukkueen nimi</label>
