@@ -82,7 +82,8 @@ export function moveBadgerToward(
   deltaMs: number
 ): { lat: number; lng: number } {
   const dist = getDistance(from.lat, from.lng, target.lat, target.lng);
-  const moveDistance = deltaMs * BADGER_SPEED_M_PER_MS;
+  const BLOODLUST_MULTIPLIER = 1.8;
+  const moveDistance = deltaMs * BADGER_SPEED_M_PER_MS * BLOODLUST_MULTIPLIER;
   if (moveDistance >= dist) return { ...target };
   const fraction = moveDistance / dist;
   return {
