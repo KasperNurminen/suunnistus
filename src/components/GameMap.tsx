@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { memo, useEffect, useRef } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Checkpoint } from '../types';
@@ -10,7 +10,7 @@ interface GameMapProps {
   destination: { lat: number; lng: number; accuracy: number } | null;
 }
 
-export function GameMap({ checkpoints, collectedIds, position, destination }: GameMapProps) {
+export const GameMap = memo(function GameMap({ checkpoints, collectedIds, position, destination }: GameMapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<L.Map | null>(null);
   const playerMarker = useRef<L.CircleMarker | null>(null);
@@ -164,4 +164,4 @@ export function GameMap({ checkpoints, collectedIds, position, destination }: Ga
   }, [destination]);
 
   return <div ref={mapRef} className="game-map" />;
-}
+});

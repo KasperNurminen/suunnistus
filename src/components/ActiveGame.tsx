@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useEffect, useState, useCallback, useRef, useMemo } from 'react';
 import { useGame } from '../context/GameContext';
 import { useGeolocation } from '../hooks/useGeolocation';
 import { CHECKPOINTS, COLLECT_RADIUS_METERS, FINAL_DESTINATION, DESTINATION_RADIUS, MIN_CHECKPOINTS_FOR_REVEAL } from '../data/checkpoints';
@@ -85,14 +85,27 @@ export function ActiveGame() {
     }
   }, [position, state.collectedCheckpoints.length, dispatch]);
 
-  const collectedIds = new Set(state.collectedCheckpoints.map((c) => c.checkpointId));
-  const revealedCoords = getRevealedCoords(state.collectedCheckpoints.length);
+  const collectedIds = useMemo(
+    () => new Set(state.collectedCheckpoints.map((c) => c.checkpointId)),
+    [state.collectedCheckpoints]
+  );
+  const revealedCoords = useMemo(
+    () => getRevealedCoords(state.collectedCheckpoints.length),
+    [state.collectedCheckpoints.length]
+  );
+  const destination = useMemo(
+    () => revealedCoords ? { lat: revealedCoords.lat, lng: revealedCoords.lng, accuracy: revealedCoords.accuracy } : null,
+    [revealedCoords]
+  );
 
   // Build effective checkpoint list with moved positions for map
-  const effectiveCheckpoints = CHECKPOINTS.map((cp) => ({
-    ...cp,
-    ...getCheckpointPos(cp),
-  }));
+  const effectiveCheckpoints = useMemo(() =>
+    CHECKPOINTS.map((cp) => ({
+      ...cp,
+      ...getCheckpointPos(cp),
+    })),
+    [getCheckpointPos]
+  );
 
   return (
     <div className="screen">
@@ -115,7 +128,7 @@ export function ActiveGame() {
         checkpoints={effectiveCheckpoints}
         collectedIds={collectedIds}
         position={position}
-        destination={revealedCoords ? { lat: revealedCoords.lat, lng: revealedCoords.lng, accuracy: revealedCoords.accuracy } : null}
+        destination={destination}
       />
 
       <ul className="checkpoint-list">
