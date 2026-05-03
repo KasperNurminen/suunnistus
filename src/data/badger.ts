@@ -70,7 +70,7 @@ export function getBadgerPosition(timestampMs: number): { lat: number; lng: numb
   return WAYPOINTS[0];
 }
 
-export const BLOODLUST_THRESHOLD = 6;
+export const BLOODLUST_THRESHOLD = 5;
 
 /**
  * Move badger from `from` toward `target` by the distance it would travel in `deltaMs`.
