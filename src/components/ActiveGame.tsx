@@ -217,10 +217,10 @@ export function ActiveGame() {
           </button>
           <button
             className="btn-dev"
-            onClick={() => setDevTimeMultiplier(m => m === 1 ? 10 : 1)}
+            onClick={() => setDevTimeMultiplier(m => m === 1 ? 10 : m === 10 ? 50 : 1)}
             style={{ flex: 1 }}
           >
-            DEV: Speed {devTimeMultiplier === 1 ? '10x' : '1x'}
+            DEV: Speed {devTimeMultiplier}x
           </button>
           {isImmune && (
             <button className="btn-dev" onClick={() => dispatch({ type: 'CLEAR_IMMUNITY' })} style={{ flex: '1 1 100%' }}>
