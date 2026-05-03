@@ -19,7 +19,9 @@ function formatTime(ms: number): string {
 export function ActiveGame() {
   const { state, dispatch } = useGame();
   const { position, error } = useGeolocation();
-  const isBloodlusted = state.collectedCheckpoints.length >= BLOODLUST_THRESHOLD;
+  const immuneRemaining = state.badgerImmunityUntil ? Math.max(0, state.badgerImmunityUntil - Date.now()) : 0;
+  const isImmune = immuneRemaining > 0;
+  const isBloodlusted = state.collectedCheckpoints.length >= BLOODLUST_THRESHOLD && !isImmune;
   const { badgerPosition } = useBadger({ playerPosition: position, isBloodlusted });
   const [elapsed, setElapsed] = useState(0);
   const [lastCollected, setLastCollected] = useState<string | null>(null);
@@ -134,9 +136,6 @@ export function ActiveGame() {
     })),
     [getCheckpointPos]
   );
-
-  const immuneRemaining = state.badgerImmunityUntil ? Math.max(0, state.badgerImmunityUntil - Date.now()) : 0;
-  const isImmune = immuneRemaining > 0;
 
   return (
     <div className="screen">
