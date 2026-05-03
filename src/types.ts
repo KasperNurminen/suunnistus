@@ -1,8 +1,15 @@
+export interface TriviaQuestion {
+  question: string;
+  options: string[];
+  correctIndex: number;
+}
+
 export interface Checkpoint {
   id: string;
   name: string;
   lat: number;
   lng: number;
+  trivia: TriviaQuestion;
 }
 
 export interface Team {
@@ -21,4 +28,8 @@ export interface GameState {
   collectedCheckpoints: CollectedCheckpoint[];
   startTime: number | null;
   endTime: number | null;
+  // Checkpoint id -> new coordinates after wrong answer
+  movedCheckpoints: Record<string, { lat: number; lng: number }>;
+  // Checkpoint currently showing a trivia question
+  pendingCheckpointId: string | null;
 }

@@ -20,6 +20,20 @@ export function getDistance(
   return EARTH_RADIUS_M * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
+export function moveRandomDirection(
+  lat: number,
+  lng: number,
+  distanceMeters: number
+): { lat: number; lng: number } {
+  const angle = Math.random() * 2 * Math.PI;
+  const dLat = (distanceMeters / EARTH_RADIUS_M) * (180 / Math.PI);
+  const dLng = (distanceMeters / (EARTH_RADIUS_M * Math.cos(toRad(lat)))) * (180 / Math.PI);
+  return {
+    lat: lat + dLat * Math.cos(angle),
+    lng: lng + dLng * Math.sin(angle),
+  };
+}
+
 export function isWithinRadius(
   checkpoint: Checkpoint,
   position: { lat: number; lng: number },
