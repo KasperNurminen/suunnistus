@@ -160,10 +160,7 @@ export function GameMap({ checkpoints, collectedIds, position, destination, badg
   useEffect(() => {
     if (!mapInstance.current) return;
 
-    // Show destination whenever coordinates have been revealed (accuracy 0 = exact)
-    const showable = destination !== null;
-
-    if (!showable) {
+    if (!destination) {
       destMarker.current?.remove();
       destCircle.current?.remove();
       destMarker.current = null;
@@ -171,42 +168,37 @@ export function GameMap({ checkpoints, collectedIds, position, destination, badg
       return;
     }
 
+    const map = mapInstance.current;
     const latlng: L.LatLngExpression = [destination.lat, destination.lng];
 
-    if (!destMarker.current) {
-      destMarker.current = L.circleMarker(latlng, {
-        radius: 10,
-        color: '#ef4444',
-        fillColor: '#ef4444',
-        fillOpacity: 0.8,
-        weight: 3,
-      }).addTo(mapInstance.current);
+    // Always remove and recreate to avoid stale marker issues
+    destMarker.current?.remove();
+    destCircle.current?.remove();
 
-      destMarker.current.bindTooltip('Määränpää', {
-        permanent: false,
-        direction: 'top',
-        offset: [0, -10],
-      });
-    } else {
-      destMarker.current.setLatLng(latlng);
-    }
+    destMarker.current = L.circleMarker(latlng, {
+      radius: 10,
+      color: '#ef4444',
+      fillColor: '#ef4444',
+      fillOpacity: 0.8,
+      weight: 3,
+    }).addTo(map);
+
+    destMarker.current.bindTooltip('Määränpää', {
+      permanent: false,
+      direction: 'top',
+      offset: [0, -10],
+    });
 
     if (destination.accuracy > 0) {
-      if (!destCircle.current) {
-        destCircle.current = L.circle(latlng, {
-          radius: destination.accuracy,
-          color: '#ef4444',
-          fillColor: '#ef4444',
-          fillOpacity: 0.08,
-          weight: 2,
-          dashArray: '6 4',
-        }).addTo(mapInstance.current);
-      } else {
-        destCircle.current.setLatLng(latlng);
-        destCircle.current.setRadius(destination.accuracy);
-      }
+      destCircle.current = L.circle(latlng, {
+        radius: destination.accuracy,
+        color: '#ef4444',
+        fillColor: '#ef4444',
+        fillOpacity: 0.08,
+        weight: 2,
+        dashArray: '6 4',
+      }).addTo(map);
     } else {
-      destCircle.current?.remove();
       destCircle.current = null;
     }
   }, [destination]);
