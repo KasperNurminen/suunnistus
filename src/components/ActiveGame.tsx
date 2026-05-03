@@ -22,7 +22,8 @@ export function ActiveGame() {
   const immuneRemaining = state.badgerImmunityUntil ? Math.max(0, state.badgerImmunityUntil - Date.now()) : 0;
   const isImmune = immuneRemaining > 0;
   const isBloodlusted = state.collectedCheckpoints.length >= BLOODLUST_THRESHOLD && !isImmune;
-  const { badgerPosition, teleportToPlayer } = useBadger({ playerPosition: position, isBloodlusted });
+  const [devTimeMultiplier, setDevTimeMultiplier] = useState(1);
+  const { badgerPosition, teleportToPlayer } = useBadger({ playerPosition: position, isBloodlusted, timeMultiplier: devTimeMultiplier });
   const [elapsed, setElapsed] = useState(0);
   const [lastCollected, setLastCollected] = useState<string | null>(null);
   const lastCollectedTimer = useRef<ReturnType<typeof setTimeout>>();
@@ -210,9 +211,18 @@ export function ActiveGame() {
       </ul>
 
       {import.meta.env.DEV && (
-        <button className="btn-dev" onClick={teleportToPlayer} style={{ marginTop: '1rem', width: '100%' }}>
-          DEV: Teleport badger to me
-        </button>
+        <div style={{ marginTop: '1rem', display: 'flex', gap: '0.5rem', width: '100%' }}>
+          <button className="btn-dev" onClick={teleportToPlayer} style={{ flex: 1 }}>
+            DEV: Teleport badger
+          </button>
+          <button
+            className="btn-dev"
+            onClick={() => setDevTimeMultiplier(m => m === 1 ? 10 : 1)}
+            style={{ flex: 1 }}
+          >
+            DEV: Speed {devTimeMultiplier === 1 ? '10x' : '1x'}
+          </button>
+        </div>
       )}
 
       <button

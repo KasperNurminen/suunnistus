@@ -6,23 +6,23 @@ const TICK_MS = 2000;
 interface UseBadgerOptions {
   playerPosition: { lat: number; lng: number } | null;
   isBloodlusted: boolean;
+  timeMultiplier?: number;
 }
 
-export function useBadger({ playerPosition, isBloodlusted }: UseBadgerOptions) {
+export function useBadger({ playerPosition, isBloodlusted, timeMultiplier = 1 }: UseBadgerOptions) {
   const [badgerPosition, setBadgerPosition] = useState(() => getBadgerPosition(Date.now()));
   const posRef = useRef(badgerPosition);
   posRef.current = badgerPosition;
 
-  // Store latest values in refs so the interval doesn't need to be recreated
   const playerPosRef = useRef(playerPosition);
   playerPosRef.current = playerPosition;
   const bloodlustedRef = useRef(isBloodlusted);
   const wasBloodlusted = useRef(false);
+  const timeMultiplierRef = useRef(timeMultiplier);
+  timeMultiplierRef.current = timeMultiplier;
 
-  // Track bloodlust transitions via ref
   useEffect(() => {
     if (isBloodlusted && !bloodlustedRef.current) {
-      // Just entered bloodlust — snap to patrol position
       posRef.current = getBadgerPosition(Date.now());
       wasBloodlusted.current = true;
     }
@@ -32,26 +32,29 @@ export function useBadger({ playerPosition, isBloodlusted }: UseBadgerOptions) {
     bloodlustedRef.current = isBloodlusted;
   }, [isBloodlusted]);
 
-  // Single stable interval — reads from refs, never recreated
   useEffect(() => {
     const interval = setInterval(() => {
+      const mult = timeMultiplierRef.current;
       if (bloodlustedRef.current && playerPosRef.current) {
-        const newPos = moveBadgerToward(posRef.current, playerPosRef.current, TICK_MS);
+        const newPos = moveBadgerToward(posRef.current, playerPosRef.current, TICK_MS * mult);
         posRef.current = newPos;
         setBadgerPosition(newPos);
       } else {
-        const pos = getBadgerPosition(Date.now());
+        // Multiply time offset to speed up patrol
+        const now = Date.now();
+        const sped = Math.floor(now * mult);
+        const pos = getBadgerPosition(sped);
         posRef.current = pos;
         setBadgerPosition(pos);
       }
     }, TICK_MS);
 
     return () => clearInterval(interval);
-  }, []); // stable — never recreated
+  }, []);
 
   const teleportToPlayer = useCallback(() => {
     if (playerPosRef.current) {
-      const offset = 0.00013; // ~15m
+      const offset = 0.00013;
       const newPos = { lat: playerPosRef.current.lat + offset, lng: playerPosRef.current.lng };
       posRef.current = newPos;
       setBadgerPosition(newPos);
