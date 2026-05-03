@@ -32,11 +32,13 @@ export function CreateTeam() {
       <h1>Marian 30v synttärisuunnistus</h1>
       <div className="story-text">
         <p>
-          Maria on karannut! Satellittijärjestelmämme on havainnut merkkejä Mariasta ympäri Mäkkylänmetsää, mutta puuverhon vuoksi hänen tarkka sijaintinsa on epäselvä. 
-          Teidän tehtävänänne on käydä tarkistamassa tarpeeksi monta pistettä, jotta voimme trianguloida hänen sijaintinsa ja löytää hänet ennen kuin on liian myöhäistä!
+          Maria on karannut! Satellittijärjestelmämme on havainnut merkkejä Mariasta ympäri Mäkkylänmetsää, mutta puuverhon vuoksi hänen tarkka sijaintinsa on epäselvä. Teidän tehtävänänne on käydä tarkistamassa tarpeeksi monta pistettä, jotta voimme trianguloida hänen sijaintinsa ja löytää hänet ennen kuin on liian myöhäistä!
         </p>
         <p>
-        Kerää siis itsellesi joukkue ja suuntaa metsään! Voittajajoukkuelle luvassa palkinto.
+          Varoitus: Maria on jättänyt jokaiselle rastille ovelan kysymyksen. Vastatkaa oikein, niin saamme signaalin talteen. Mutta jos vastaatte väärin, Maria huomaa teidät ja siirtää jälkensä uuteen paikkaan!
+        </p>
+        <p>
+          Kerää siis itsellesi joukkue ja suuntaa metsään! Voittajajoukkueelle luvassa palkinto.
         </p>
       </div>
       <form onSubmit={handleSubmit}>
