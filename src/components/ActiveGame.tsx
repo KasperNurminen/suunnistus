@@ -211,7 +211,7 @@ export function ActiveGame() {
       </ul>
 
       {import.meta.env.DEV && (
-        <div style={{ marginTop: '1rem', display: 'flex', gap: '0.5rem', width: '100%' }}>
+        <div style={{ marginTop: '1rem', display: 'flex', gap: '0.5rem', width: '100%', flexWrap: 'wrap' }}>
           <button className="btn-dev" onClick={teleportToPlayer} style={{ flex: 1 }}>
             DEV: Teleport badger
           </button>
@@ -222,6 +222,11 @@ export function ActiveGame() {
           >
             DEV: Speed {devTimeMultiplier === 1 ? '10x' : '1x'}
           </button>
+          {isImmune && (
+            <button className="btn-dev" onClick={() => dispatch({ type: 'CLEAR_IMMUNITY' })} style={{ flex: '1 1 100%' }}>
+              DEV: Remove immunity
+            </button>
+          )}
         </div>
       )}
 

@@ -11,6 +11,7 @@ type Action =
   | { type: 'WRONG_ANSWER'; newLat: number; newLng: number }
   | { type: 'DISMISS_TRIVIA' }
   | { type: 'CAUGHT_BY_BADGER' }
+  | { type: 'CLEAR_IMMUNITY' }
   | { type: 'REACH_DESTINATION' }
   | { type: 'RESET' };
 
@@ -87,6 +88,8 @@ function reducer(state: GameState, action: Action): GameState {
         badgerImmunityUntil: Date.now() + BADGER_IMMUNITY_MS,
       };
     }
+    case 'CLEAR_IMMUNITY':
+      return { ...state, badgerImmunityUntil: null };
     case 'REACH_DESTINATION':
       return { ...state, phase: 'results', endTime: Date.now() };
     case 'RESET': {
