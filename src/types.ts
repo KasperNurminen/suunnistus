@@ -28,8 +28,7 @@ export interface GameState {
   collectedCheckpoints: CollectedCheckpoint[];
   startTime: number | null;
   endTime: number | null;
-  // Checkpoint id -> new coordinates after wrong answer
   movedCheckpoints: Record<string, { lat: number; lng: number }>;
-  // Checkpoint currently showing a trivia question
   pendingCheckpointId: string | null;
+  badgerImmunityUntil: number | null;
 }

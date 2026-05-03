@@ -1,5 +1,6 @@
 import { createContext, useContext, useReducer, useEffect, ReactNode } from 'react';
 import { GameState, Team, CollectedCheckpoint } from '../types';
+import { BADGER_IMMUNITY_MS } from '../data/badger';
 
 const STORAGE_KEY = 'suunnistus-game';
 
@@ -9,6 +10,7 @@ type Action =
   | { type: 'CORRECT_ANSWER' }
   | { type: 'WRONG_ANSWER'; newLat: number; newLng: number }
   | { type: 'DISMISS_TRIVIA' }
+  | { type: 'CAUGHT_BY_BADGER' }
   | { type: 'REACH_DESTINATION' }
   | { type: 'RESET' };
 
@@ -20,6 +22,7 @@ const initialState: GameState = {
   endTime: null,
   movedCheckpoints: {},
   pendingCheckpointId: null,
+  badgerImmunityUntil: null,
 };
 
 function loadState(): GameState {
@@ -42,7 +45,7 @@ function saveState(state: GameState) {
 function reducer(state: GameState, action: Action): GameState {
   switch (action.type) {
     case 'CREATE_TEAM':
-      return { ...state, team: action.team, phase: 'active', startTime: Date.now(), collectedCheckpoints: [], movedCheckpoints: {}, pendingCheckpointId: null };
+      return { ...state, team: action.team, phase: 'active', startTime: Date.now(), collectedCheckpoints: [], movedCheckpoints: {}, pendingCheckpointId: null, badgerImmunityUntil: null };
     case 'ARRIVE_AT_CHECKPOINT':
       return { ...state, pendingCheckpointId: action.checkpointId };
     case 'CORRECT_ANSWER': {
@@ -69,6 +72,21 @@ function reducer(state: GameState, action: Action): GameState {
     }
     case 'DISMISS_TRIVIA':
       return { ...state, pendingCheckpointId: null };
+    case 'CAUGHT_BY_BADGER': {
+      if (state.collectedCheckpoints.length === 0) return state;
+      // Remove the last collected checkpoint
+      const removed = state.collectedCheckpoints[state.collectedCheckpoints.length - 1];
+      const newCollected = state.collectedCheckpoints.slice(0, -1);
+      // Also clear any moved position for that checkpoint so it resets to original
+      const newMoved = { ...state.movedCheckpoints };
+      delete newMoved[removed.checkpointId];
+      return {
+        ...state,
+        collectedCheckpoints: newCollected,
+        movedCheckpoints: newMoved,
+        badgerImmunityUntil: Date.now() + BADGER_IMMUNITY_MS,
+      };
+    }
     case 'REACH_DESTINATION':
       return { ...state, phase: 'results', endTime: Date.now() };
     case 'RESET': {

@@ -1,7 +1,8 @@
-import { memo, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Checkpoint } from '../types';
+import { getBadgerPosition } from '../data/badger';
 
 interface GameMapProps {
   checkpoints: Checkpoint[];
@@ -10,7 +11,7 @@ interface GameMapProps {
   destination: { lat: number; lng: number; accuracy: number } | null;
 }
 
-export const GameMap = memo(function GameMap({ checkpoints, collectedIds, position, destination }: GameMapProps) {
+export function GameMap({ checkpoints, collectedIds, position, destination }: GameMapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<L.Map | null>(null);
   const playerMarker = useRef<L.CircleMarker | null>(null);
@@ -18,6 +19,8 @@ export const GameMap = memo(function GameMap({ checkpoints, collectedIds, positi
   const checkpointMarkers = useRef<Map<string, L.CircleMarker>>(new Map());
   const destMarker = useRef<L.CircleMarker | null>(null);
   const destCircle = useRef<L.Circle | null>(null);
+  const badgerMarker = useRef<L.Marker | null>(null);
+  const badgerInterval = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Initialize map
   useEffect(() => {
@@ -56,12 +59,33 @@ export const GameMap = memo(function GameMap({ checkpoints, collectedIds, positi
       checkpointMarkers.current.set(cp.id, marker);
     }
 
+    // Add badger marker — updates on its own interval, no React dependency
+    const badgerIcon = L.divIcon({
+      html: '<div class="badger-icon">🦡</div>',
+      className: 'badger-marker',
+      iconSize: [30, 30],
+      iconAnchor: [15, 15],
+    });
+
+    const initialPos = getBadgerPosition(Date.now());
+    badgerMarker.current = L.marker([initialPos.lat, initialPos.lng], {
+      icon: badgerIcon,
+      zIndexOffset: 1000,
+    }).addTo(map);
+
+    badgerInterval.current = setInterval(() => {
+      const bp = getBadgerPosition(Date.now());
+      badgerMarker.current?.setLatLng([bp.lat, bp.lng]);
+    }, 2000);
+
     mapInstance.current = map;
 
     return () => {
+      if (badgerInterval.current) clearInterval(badgerInterval.current);
       map.remove();
       mapInstance.current = null;
       checkpointMarkers.current.clear();
+      badgerMarker.current = null;
     };
   }, [checkpoints]);
 
@@ -112,7 +136,6 @@ export const GameMap = memo(function GameMap({ checkpoints, collectedIds, positi
   useEffect(() => {
     if (!mapInstance.current) return;
 
-    // Only show destination on map when accuracy is useful (< 1.5km)
     const showable = destination && destination.accuracy <= 1500;
 
     if (!showable) {
@@ -164,4 +187,4 @@ export const GameMap = memo(function GameMap({ checkpoints, collectedIds, positi
   }, [destination]);
 
   return <div ref={mapRef} className="game-map" />;
-});
+}

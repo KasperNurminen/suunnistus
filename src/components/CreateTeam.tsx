@@ -38,7 +38,9 @@ export function CreateTeam() {
           Asettukaamme kaikki hetkeksi Marian saappaisiin ja auttakaamme häntä palauttamaan mieleensä kuka hän on. Jokaisella rastilla odottaa muistinpalanen - kysymys, jonka oikea vastaus palauttaa osan Marian identiteetistä. Väärä vastaus hämärtää muiston ja se pakenee uuteen paikkaan.
         </p>
         <p>
-          Mitä enemmän muistoja palautatte, sitä lähemmäs pääsette selvittämään minne Maria on kadottanut jotain tärkeää. Kerätkää joukkue ja suunnatkaa metsään - nopein joukkue palkitaan!
+          Mitä enemmän muistoja palautatte, sitä lähemmäs pääsette selvittämään minne Maria on kadottanut jotain tärkeää.
+          Mutta voi ei, mäyrä kiertää edelleen ympäri aluetta eikä pidä tunkeilijoista. Jos mäyrä saa teidät kiinni, se vie teiltä yhden palautuneen muiston.
+           Kerätkää joukkue ja suunnatkaa metsään - nopein joukkue palkitaan!
         </p>
       </div>
       <form onSubmit={handleSubmit}>

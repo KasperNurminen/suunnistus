@@ -1,7 +1,9 @@
 import { useEffect, useState, useCallback, useRef, useMemo } from 'react';
 import { useGame } from '../context/GameContext';
 import { useGeolocation } from '../hooks/useGeolocation';
+import { useBadger } from '../hooks/useBadger';
 import { CHECKPOINTS, COLLECT_RADIUS_METERS, FINAL_DESTINATION, DESTINATION_RADIUS, MIN_CHECKPOINTS_FOR_REVEAL } from '../data/checkpoints';
+import { BADGER_CATCH_RADIUS } from '../data/badger';
 import { getDistance } from '../utils/geo';
 import { GameMap } from './GameMap';
 import { CoordinateReveal, getRevealedCoords } from './CoordinateReveal';
@@ -17,9 +19,12 @@ function formatTime(ms: number): string {
 export function ActiveGame() {
   const { state, dispatch } = useGame();
   const { position, error } = useGeolocation();
+  const { badgerPosition } = useBadger();
   const [elapsed, setElapsed] = useState(0);
   const [lastCollected, setLastCollected] = useState<string | null>(null);
   const lastCollectedTimer = useRef<ReturnType<typeof setTimeout>>();
+  const [badgerCaught, setBadgerCaught] = useState(false);
+  const badgerCaughtTimer = useRef<ReturnType<typeof setTimeout>>();
 
   // Get effective checkpoint position (original or moved)
   const getCheckpointPos = useCallback((cp: typeof CHECKPOINTS[0]) => {
@@ -59,6 +64,28 @@ export function ActiveGame() {
   useEffect(() => {
     checkProximity();
   }, [checkProximity]);
+
+  // Check badger proximity
+  useEffect(() => {
+    if (!position || !badgerPosition) return;
+    if (state.collectedCheckpoints.length === 0) return;
+    if (state.pendingCheckpointId) return; // don't catch during trivia
+
+    // Check immunity
+    const now = Date.now();
+    if (state.badgerImmunityUntil && now < state.badgerImmunityUntil) return;
+
+    const dist = getDistance(badgerPosition.lat, badgerPosition.lng, position.lat, position.lng);
+    if (dist <= BADGER_CATCH_RADIUS) {
+      if (navigator.vibrate) {
+        navigator.vibrate([500, 200, 500, 200, 500]);
+      }
+      dispatch({ type: 'CAUGHT_BY_BADGER' });
+      setBadgerCaught(true);
+      clearTimeout(badgerCaughtTimer.current);
+      badgerCaughtTimer.current = setTimeout(() => setBadgerCaught(false), 4000);
+    }
+  }, [position, badgerPosition, state.collectedCheckpoints.length, state.badgerImmunityUntil, state.pendingCheckpointId, dispatch]);
 
   // Watch for newly collected checkpoints to show toast
   const prevCollectedCount = useRef(state.collectedCheckpoints.length);
@@ -107,6 +134,8 @@ export function ActiveGame() {
     [getCheckpointPos]
   );
 
+  const isImmune = state.badgerImmunityUntil !== null && Date.now() < state.badgerImmunityUntil;
+
   return (
     <div className="screen">
       <div className="timer">{formatTime(elapsed)}</div>
@@ -118,6 +147,14 @@ export function ActiveGame() {
 
       {lastCollected && (
         <div className="collected-toast">Kerätty: {lastCollected}!</div>
+      )}
+
+      {badgerCaught && (
+        <div className="badger-toast">Mäyrä sai sinut kiinni! Menetit yhden muiston.</div>
+      )}
+
+      {isImmune && !badgerCaught && (
+        <div className="immunity-badge">Mäyräsuoja aktiivinen</div>
       )}
 
       <CoordinateReveal collectedCount={state.collectedCheckpoints.length} />
