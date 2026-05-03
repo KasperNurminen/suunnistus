@@ -32,14 +32,11 @@ export function CreateTeam() {
       <h1>Marian 30v synttärisuunnistus</h1>
       <div className="story-text">
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum
-          auctor nisi vel magna tincidunt, in fermentum libero gravida. Sed
-          malesuada justo at risus cursus, vel facilisis nulla ultrices.
+          Maria on karannut! Satellittijärjestelmämme on havainnut merkkejä Mariasta ympäri Mäkkylänmetsää, mutta puuverhon vuoksi hänen tarkka sijaintinsa on epäselvä. 
+          Teidän tehtävänänne on käydä tarkistamassa tarpeeksi monta pistettä, jotta voimme trianguloida hänen sijaintinsa ja löytää hänet ennen kuin on liian myöhäistä!
         </p>
         <p>
-          Pellentesque habitant morbi tristique senectus et netus et malesuada
-          fames ac turpis egestas. Integer vel velit in odio posuere blandit
-          eget nec arcu. Cras pharetra lorem a lectus consequat viverra.
+        Kerää siis itsellesi joukkue ja suuntaa metsään! Voittajajoukkuelle luvassa palkinto.
         </p>
       </div>
       <form onSubmit={handleSubmit}>
