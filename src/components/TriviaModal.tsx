@@ -38,7 +38,7 @@ export function TriviaModal() {
   return (
     <div className="trivia-overlay">
       <div className="trivia-modal">
-        <div className="trivia-header">{checkpoint.name}</div>
+        <div className="trivia-header">Muistinpalanen — {checkpoint.name}</div>
         <p className="trivia-question">{trivia.question}</p>
         <div className="trivia-options">
           {trivia.options.map((option, i) => (
@@ -57,11 +57,11 @@ export function TriviaModal() {
           ))}
         </div>
         {feedback === 'correct' && (
-          <div className="trivia-feedback correct">Oikein!</div>
+          <div className="trivia-feedback correct">Muisto palautui!</div>
         )}
         {feedback === 'wrong' && (
           <div className="trivia-feedback wrong">
-            Väärin! Rasti siirtyi 100m satunnaiseen suuntaan. Marian jäljet johtavat muualle...
+            Väärin! Muistikuva hämärtyi ja rasti siirtyi 100m uuteen paikkaan...
           </div>
         )}
       </div>

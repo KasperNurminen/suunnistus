@@ -6,7 +6,7 @@ export const CHECKPOINTS: Checkpoint[] = [
     id: '1', name: 'Rasti 1',
     lat: 60.22342231225804, lng: 24.84101685311893,
     trivia: {
-      question: 'Mitä näistä Maria harrastaa?',
+      question: 'Mitä näistä minä harrastan?',
       options: ['Soutu', 'Melonta', 'Purjehdus'],
       correctIndex: 0,
     },
@@ -15,7 +15,7 @@ export const CHECKPOINTS: Checkpoint[] = [
     id: '2', name: 'Rasti 2',
     lat: 60.22335247608895, lng: 24.838351303799655,
     trivia: {
-      question: 'Mitkä on Marian kissojen nimet?',
+      question: 'Mitkä ovat minun kissojeni nimet?',
       options: ['Kissa & Koira', 'Kaisla & Cocoa', 'Viiru & Pesonen'],
       correctIndex: 1,
     },
@@ -24,7 +24,7 @@ export const CHECKPOINTS: Checkpoint[] = [
     id: '3', name: 'Rasti 3',
     lat: 60.222468951130715, lng: 24.839360567342702,
     trivia: {
-      question: 'Missä näistä kaupungeista Maria EI ole koskaan asunut?',
+      question: 'Missä näistä kaupungeista minä EN ole koskaan asunut?',
       options: ['Lahti', 'Helsinki', 'Vantaa'],
       correctIndex: 2,
     },
@@ -33,7 +33,7 @@ export const CHECKPOINTS: Checkpoint[] = [
     id: '4', name: 'Rasti 4',
     lat: 60.225692281036366, lng: 24.83296139902883,
     trivia: {
-      question: 'Mitä Maria tällä hetkellä opiskelee?',
+      question: 'Mitä minä tällä hetkellä opiskelen?',
       options: ['Biologiaa', 'Ympäristötieteitä', 'Ympäristöteknologiaa'],
       correctIndex: 1,
     },
@@ -42,7 +42,7 @@ export const CHECKPOINTS: Checkpoint[] = [
     id: '5', name: 'Rasti 5',
     lat: 60.22425405648699, lng: 24.8324789188986,
     trivia: {
-      question: 'Koska on Marian syntymäpäivä?',
+      question: 'Koska on minun syntymäpäiväni?',
       options: ['6.5.', '3.5.', '9.5.'],
       correctIndex: 0,
     },
@@ -51,8 +51,8 @@ export const CHECKPOINTS: Checkpoint[] = [
     id: '6', name: 'Rasti 6',
     lat: 60.225513048236614, lng: 24.834978238203526,
     trivia: {
-      question: 'Missä Maria on töissä?',
-      options: ['Sosiaali- ja terveysministeriö', 'Terveyden ja hyvinvoinnin laitos', 'Maria ei ole tällä hetkellä töissä'],
+      question: 'Missä minä olen töissä?',
+      options: ['Sosiaali- ja terveysministeriö', 'Terveyden ja hyvinvoinnin laitos', 'En ole tällä hetkellä töissä'],
       correctIndex: 1,
     },
   },
@@ -60,7 +60,7 @@ export const CHECKPOINTS: Checkpoint[] = [
     id: '7', name: 'Rasti 7',
     lat: 60.22576653637685, lng: 24.83049639929952,
     trivia: {
-      question: 'Montako polkupyörää Maria omistaa?',
+      question: 'Montako polkupyörää minä omistan?',
       options: ['1', '2', '3'],
       correctIndex: 1,
     },
@@ -69,7 +69,7 @@ export const CHECKPOINTS: Checkpoint[] = [
     id: '8', name: 'Rasti 8',
     lat: 60.22411780754917, lng: 24.835651209554612,
     trivia: {
-      question: 'Minkälaisesta musiikista Maria pitää?',
+      question: 'Minkälaisesta musiikista minä pidän?',
       options: ['Suomalaisesta uliulimusiikista', 'Energisistä tanssibiiseistä', 'Uudemmasta ranskalaisesta torvimusiikista'],
       correctIndex: 1,
     },

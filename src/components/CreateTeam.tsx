@@ -32,13 +32,13 @@ export function CreateTeam() {
       <h1>Marian 30v synttärisuunnistus</h1>
       <div className="story-text">
         <p>
-          Maria on karannut! Satellittijärjestelmämme on havainnut merkkejä Mariasta ympäri Mäkkylänmetsää, mutta puuverhon vuoksi hänen tarkka sijaintinsa on epäselvä. Teidän tehtävänänne on käydä tarkistamassa tarpeeksi monta pistettä, jotta voimme trianguloida hänen sijaintinsa ja löytää hänet ennen kuin on liian myöhäistä!
+          Maria on menettänyt muistinsa eikä muista enää mitään — ei edes kuka hän on. Jäljellä on vain hataria muistikuvia, jotka on ripoteltu ympäri Mäkkylänmetsää.
         </p>
         <p>
-          Varoitus: Maria on jättänyt jokaiselle rastille ovelan kysymyksen. Vastatkaa oikein, niin saamme signaalin talteen. Mutta jos vastaatte väärin, Maria huomaa teidät ja siirtää jälkensä uuteen paikkaan!
+          Asettukaamme kaikki hetkeksi Marian saappaisiin ja autetaan häntä palauttamaan mieleensä kuka hän on. Jokaisella rastilla odottaa muistinpalanen — kysymys, jonka oikea vastaus palauttaa osan Marian identiteetistä. Väärä vastaus hämärtää muiston ja se pakenee uuteen paikkaan.
         </p>
         <p>
-          Kerää siis itsellesi joukkue ja suuntaa metsään! Voittajajoukkueelle luvassa palkinto.
+          Mitä enemmän muistoja palautatte, sitä lähemmäs pääsette selvittämään minne Maria on kadottanut jotain tärkeää. Kerätkää joukkue ja suuntatkaa metsään — nopein joukkue palkitaan!
         </p>
       </div>
       <form onSubmit={handleSubmit}>
