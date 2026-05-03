@@ -160,7 +160,8 @@ export function GameMap({ checkpoints, collectedIds, position, destination, badg
   useEffect(() => {
     if (!mapInstance.current) return;
 
-    const showable = destination && destination.accuracy <= 1500;
+    // Show destination whenever coordinates have been revealed (accuracy 0 = exact)
+    const showable = destination !== null;
 
     if (!showable) {
       destMarker.current?.remove();
