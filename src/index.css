@@ -1,0 +1,419 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #0f172a;
+  color: #e2e8f0;
+  min-height: 100vh;
+}
+
+.screen {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 1rem;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 0.25rem;
+  color: #f8fafc;
+}
+
+h2 {
+  font-size: 1.25rem;
+  margin: 1.5rem 0 0.75rem;
+  color: #94a3b8;
+}
+
+.subtitle {
+  color: #64748b;
+  margin-bottom: 2rem;
+}
+
+/* Forms */
+form {
+  width: 100%;
+}
+
+.field {
+  margin-bottom: 1.5rem;
+}
+
+.field label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #94a3b8;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid #334155;
+  border-radius: 0.5rem;
+  background: #1e293b;
+  color: #f8fafc;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+input[type="text"]:focus {
+  border-color: #3b82f6;
+}
+
+input[type="text"]::placeholder {
+  color: #475569;
+}
+
+.member-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.member-row input {
+  flex: 1;
+}
+
+.btn-icon {
+  width: 2.75rem;
+  border: 2px solid #334155;
+  border-radius: 0.5rem;
+  background: #1e293b;
+  color: #ef4444;
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-icon:hover {
+  background: #2d1b1b;
+}
+
+.btn-secondary {
+  background: none;
+  border: 2px dashed #334155;
+  border-radius: 0.5rem;
+  color: #64748b;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  width: 100%;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.btn-secondary:hover {
+  border-color: #3b82f6;
+  color: #3b82f6;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  border-radius: 0.75rem;
+  background: #3b82f6;
+  color: white;
+  font-size: 1.125rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background 0.2s;
+}
+
+.btn-primary:hover {
+  background: #2563eb;
+}
+
+.btn-primary:disabled {
+  background: #1e3a5f;
+  color: #475569;
+  cursor: not-allowed;
+}
+
+.btn-clear {
+  margin-top: 2rem;
+  background: none;
+  border: none;
+  color: #64748b;
+  font-size: 0.8rem;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0.5rem;
+}
+
+.btn-clear:hover {
+  color: #ef4444;
+}
+
+.btn-reset {
+  margin-top: 1.5rem;
+  background: none;
+  border: 1px solid #334155;
+  border-radius: 0.5rem;
+  color: #94a3b8;
+  font-size: 0.875rem;
+  padding: 0.5rem 1.5rem;
+  cursor: pointer;
+}
+
+.btn-reset:hover {
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+/* Active Game */
+.timer {
+  font-size: 3.5rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: #f8fafc;
+  margin: 1rem 0 0.5rem;
+}
+
+.team-badge {
+  background: #1e293b;
+  border: 1px solid #334155;
+  padding: 0.25rem 1rem;
+  border-radius: 2rem;
+  font-size: 0.875rem;
+  color: #94a3b8;
+  margin-bottom: 1rem;
+}
+
+.progress {
+  font-size: 1.125rem;
+  color: #3b82f6;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.collected-toast {
+  background: #166534;
+  color: #bbf7d0;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  animation: slideIn 0.3s ease-out;
+  margin-bottom: 1rem;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Coordinate Reveal */
+.coord-reveal {
+  width: 100%;
+  background: #1e293b;
+  border: 2px solid #334155;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.coord-reveal.locked {
+  border-color: #475569;
+  border-style: dashed;
+}
+
+.coord-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.coord-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 0.5rem;
+}
+
+.coord-number {
+  color: #ef4444;
+}
+
+.coord-hidden {
+  color: #475569;
+}
+
+.coord-separator {
+  color: #64748b;
+  margin: 0 0.25rem;
+}
+
+.coord-accuracy {
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+
+.coord-hint {
+  font-size: 0.8rem;
+  color: #64748b;
+  font-style: italic;
+}
+
+.coord-hint-more {
+  color: #64748b;
+}
+
+/* Map */
+.game-map {
+  width: 100%;
+  height: 50vh;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  margin-bottom: 1rem;
+  border: 1px solid #334155;
+}
+
+.game-map .leaflet-control-attribution {
+  font-size: 0.6rem;
+  background: rgba(15, 23, 42, 0.7);
+  color: #64748b;
+}
+
+.game-map .leaflet-control-attribution a {
+  color: #64748b;
+}
+
+.error {
+  background: #7f1d1d;
+  color: #fca5a5;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+  width: 100%;
+  text-align: center;
+}
+
+.checkpoint-list {
+  list-style: none;
+  width: 100%;
+}
+
+.checkpoint-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid #1e293b;
+  border-radius: 0.75rem;
+  margin-bottom: 0.5rem;
+  background: #1e293b;
+  transition: background 0.3s, border-color 0.3s;
+}
+
+.checkpoint-item.collected {
+  background: #14532d;
+  border-color: #166534;
+}
+
+.checkpoint-status {
+  font-size: 1.25rem;
+  width: 1.5rem;
+  text-align: center;
+}
+
+.checkpoint-item.collected .checkpoint-status {
+  color: #4ade80;
+}
+
+.checkpoint-name {
+  flex: 1;
+  font-weight: 500;
+}
+
+.checkpoint-distance {
+  color: #64748b;
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* DEV button - temporary */
+.btn-dev {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.7rem;
+  background: #92400e;
+  color: #fbbf24;
+  border: 1px solid #b45309;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* Results */
+.answer-reveal {
+  font-size: 1rem;
+  color: #ef4444;
+  margin-bottom: 1rem;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+}
+
+.total-time {
+  font-size: 4rem;
+  font-weight: 700;
+  color: #4ade80;
+  margin: 1rem 0 0.5rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.members {
+  color: #64748b;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+.results-list {
+  width: 100%;
+  list-style: none;
+  counter-reset: result;
+}
+
+.result-item {
+  counter-increment: result;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #1e293b;
+}
+
+.result-item::before {
+  content: counter(result) ".";
+  color: #64748b;
+  font-weight: 600;
+  min-width: 1.5rem;
+}
+
+.result-name {
+  flex: 1;
+}
+
+.result-split {
+  color: #94a3b8;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.875rem;
+}
