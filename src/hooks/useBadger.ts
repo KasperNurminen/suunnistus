@@ -13,20 +13,33 @@ export function useBadger({ playerPosition, isBloodlusted }: UseBadgerOptions) {
   const posRef = useRef(badgerPosition);
   posRef.current = badgerPosition;
 
+  // Store latest values in refs so the interval doesn't need to be recreated
+  const playerPosRef = useRef(playerPosition);
+  playerPosRef.current = playerPosition;
+  const bloodlustedRef = useRef(isBloodlusted);
   const wasBloodlusted = useRef(false);
 
+  // Track bloodlust transitions via ref
+  useEffect(() => {
+    if (isBloodlusted && !bloodlustedRef.current) {
+      // Just entered bloodlust — snap to patrol position
+      posRef.current = getBadgerPosition(Date.now());
+      wasBloodlusted.current = true;
+    }
+    if (!isBloodlusted && bloodlustedRef.current) {
+      wasBloodlusted.current = false;
+    }
+    bloodlustedRef.current = isBloodlusted;
+  }, [isBloodlusted]);
+
+  // Single stable interval — reads from refs, never recreated
   useEffect(() => {
     const interval = setInterval(() => {
-      if (isBloodlusted && playerPosition) {
-        if (!wasBloodlusted.current) {
-          posRef.current = getBadgerPosition(Date.now());
-          wasBloodlusted.current = true;
-        }
-        const newPos = moveBadgerToward(posRef.current, playerPosition, TICK_MS);
+      if (bloodlustedRef.current && playerPosRef.current) {
+        const newPos = moveBadgerToward(posRef.current, playerPosRef.current, TICK_MS);
         posRef.current = newPos;
         setBadgerPosition(newPos);
       } else {
-        wasBloodlusted.current = false;
         const pos = getBadgerPosition(Date.now());
         posRef.current = pos;
         setBadgerPosition(pos);
@@ -34,17 +47,16 @@ export function useBadger({ playerPosition, isBloodlusted }: UseBadgerOptions) {
     }, TICK_MS);
 
     return () => clearInterval(interval);
-  }, [isBloodlusted, playerPosition]);
+  }, []); // stable — never recreated
 
   const teleportToPlayer = useCallback(() => {
-    if (playerPosition) {
-      // Place badger 15m from player (within catch radius)
+    if (playerPosRef.current) {
       const offset = 0.00013; // ~15m
-      const newPos = { lat: playerPosition.lat + offset, lng: playerPosition.lng };
+      const newPos = { lat: playerPosRef.current.lat + offset, lng: playerPosRef.current.lng };
       posRef.current = newPos;
       setBadgerPosition(newPos);
     }
-  }, [playerPosition]);
+  }, []);
 
   return { badgerPosition, teleportToPlayer };
 }
