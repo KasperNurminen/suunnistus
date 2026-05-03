@@ -103,7 +103,7 @@ export function ActiveGame() {
                 </span>
               )}
               {/* DEV: temporary manual collect button */}
-              {!collected && (
+              {import.meta.env.DEV && !collected && (
                 <button
                   className="btn-dev"
                   onClick={() => dispatch({ type: 'COLLECT_CHECKPOINT', checkpointId: cp.id })}
