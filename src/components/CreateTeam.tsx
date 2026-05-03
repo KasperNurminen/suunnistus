@@ -32,15 +32,15 @@ export function CreateTeam() {
       <h1>Marian 30v synttärisuunnistus</h1>
       <div className="story-text">
         <p>
-          Maria oli eilen kävelyllä Mäkkylänmetsässä. Metsässä Maria näki suuren mäyrän ja lähti innoissaan juoksemaan sen perään. Maria kuitenkin kompastui juurakkoon ja löi päänsä. Tämän vuoksi Maria on menettänyt muistinsa eikä muista enää edes kuka hän on. Jäljellä on vain hataria muistikuvia, jotka on ripoteltu ympäri Mäkkylänmetsää.
+          Maria oli eilen kävelyllä Mäkkylänmetsässä. Metsässä oli kuitenkin suuri ja pelottava mäyrä joka alkoi jahtaamaan Mariaa. Maria juoksi urhoollisesti pakoon, mutta kompastui juurakkoon ja löi päänsä. Tämän seurauksena Maria on menettänyt muistinsa eikä muista enää edes kuka hän on. Jäljellä on vain hataria muistikuvia, jotka on ripoteltu ympäri Mäkkylänmetsää.
         </p>
         <p>
           Asettukaamme kaikki hetkeksi Marian saappaisiin ja auttakaamme häntä palauttamaan mieleensä kuka hän on. Jokaisella rastilla odottaa muistinpalanen - kysymys, jonka oikea vastaus palauttaa osan Marian identiteetistä. Väärä vastaus hämärtää muiston ja se pakenee uuteen paikkaan.
+          Vaarallinen mäyrä ei kuitenkaan ole hävinnyt mihinkään, vaan se vaanii edelleen metsässä. Te ette pärjää sille, joten ainoa mahdollisuus on vältellä sitä. Jos mäyrä saa teidät kiinni, se vie teiltä yhden palautuneen muiston.
         </p>
         <p>
           Mitä enemmän muistoja palautatte, sitä lähemmäs pääsette selvittämään minne Maria on kadottanut jotain tärkeää.
-          Mutta voi ei, mäyrä kiertää edelleen ympäri aluetta eikä pidä tunkeilijoista. Jos mäyrä saa teidät kiinni, se vie teiltä yhden palautuneen muiston.
-           Kerätkää joukkue ja suunnatkaa metsään - nopein joukkue palkitaan!
+          Kerätkää joukkue ja suunnatkaa metsään - nopein joukkue palkitaan!
         </p>
       </div>
       <form onSubmit={handleSubmit}>
