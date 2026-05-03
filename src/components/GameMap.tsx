@@ -2,16 +2,20 @@ import { useEffect, useRef } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Checkpoint } from '../types';
-import { getBadgerPosition } from '../data/badger';
 
 interface GameMapProps {
   checkpoints: Checkpoint[];
   collectedIds: Set<string>;
   position: { lat: number; lng: number } | null;
   destination: { lat: number; lng: number; accuracy: number } | null;
+  badgerPosition: { lat: number; lng: number };
+  isBloodlusted: boolean;
 }
 
-export function GameMap({ checkpoints, collectedIds, position, destination }: GameMapProps) {
+const BADGER_ICON_NORMAL = '<div class="badger-icon">🦡</div>';
+const BADGER_ICON_ANGRY = '<div class="badger-icon badger-angry">🦡</div>';
+
+export function GameMap({ checkpoints, collectedIds, position, destination, badgerPosition, isBloodlusted }: GameMapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<L.Map | null>(null);
   const playerMarker = useRef<L.CircleMarker | null>(null);
@@ -19,8 +23,8 @@ export function GameMap({ checkpoints, collectedIds, position, destination }: Ga
   const checkpointMarkers = useRef<Map<string, L.CircleMarker>>(new Map());
   const destMarker = useRef<L.CircleMarker | null>(null);
   const destCircle = useRef<L.Circle | null>(null);
-  const badgerMarker = useRef<L.Marker | null>(null);
-  const badgerInterval = useRef<ReturnType<typeof setInterval> | null>(null);
+  const badgerMarkerRef = useRef<L.Marker | null>(null);
+  const badgerBloodlusted = useRef(false);
 
   // Initialize map (once)
   useEffect(() => {
@@ -40,49 +44,27 @@ export function GameMap({ checkpoints, collectedIds, position, destination }: Ga
 
     L.control.zoom({ position: 'bottomright' }).addTo(map);
 
-    // Add badger marker
-    const badgerIcon = L.divIcon({
-      html: '<div class="badger-icon">🦡</div>',
-      className: 'badger-marker',
-      iconSize: [30, 30],
-      iconAnchor: [15, 15],
-    });
-
-    const initialPos = getBadgerPosition(Date.now());
-    badgerMarker.current = L.marker([initialPos.lat, initialPos.lng], {
-      icon: badgerIcon,
-      zIndexOffset: 1000,
-    }).addTo(map);
-
-    badgerInterval.current = setInterval(() => {
-      const bp = getBadgerPosition(Date.now());
-      badgerMarker.current?.setLatLng([bp.lat, bp.lng]);
-    }, 2000);
-
     mapInstance.current = map;
 
     return () => {
-      if (badgerInterval.current) clearInterval(badgerInterval.current);
       map.remove();
       mapInstance.current = null;
       checkpointMarkers.current.clear();
-      badgerMarker.current = null;
+      badgerMarkerRef.current = null;
       playerMarker.current = null;
       accuracyCircle.current = null;
     };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
-  // Update checkpoint markers when positions change (e.g. wrong answer moves them)
+  // Update checkpoint markers
   useEffect(() => {
     if (!mapInstance.current) return;
 
-    // Remove old markers
     for (const [, marker] of checkpointMarkers.current) {
       marker.remove();
     }
     checkpointMarkers.current.clear();
 
-    // Add updated markers
     for (const cp of checkpoints) {
       const marker = L.circleMarker([cp.lat, cp.lng], {
         radius: 12,
@@ -136,20 +118,43 @@ export function GameMap({ checkpoints, collectedIds, position, destination }: Ga
   useEffect(() => {
     for (const [id, marker] of checkpointMarkers.current) {
       if (collectedIds.has(id)) {
-        marker.setStyle({
-          color: '#4ade80',
-          fillColor: '#4ade80',
-          fillOpacity: 0.6,
-        });
+        marker.setStyle({ color: '#4ade80', fillColor: '#4ade80', fillOpacity: 0.6 });
       } else {
-        marker.setStyle({
-          color: '#f59e0b',
-          fillColor: '#f59e0b',
-          fillOpacity: 0.3,
-        });
+        marker.setStyle({ color: '#f59e0b', fillColor: '#f59e0b', fillOpacity: 0.3 });
       }
     }
   }, [collectedIds]);
+
+  // Update badger marker
+  useEffect(() => {
+    if (!mapInstance.current) return;
+
+    const latlng: L.LatLngExpression = [badgerPosition.lat, badgerPosition.lng];
+
+    if (!badgerMarkerRef.current) {
+      const icon = L.divIcon({
+        html: isBloodlusted ? BADGER_ICON_ANGRY : BADGER_ICON_NORMAL,
+        className: 'badger-marker',
+        iconSize: [30, 30],
+        iconAnchor: [15, 15],
+      });
+      badgerMarkerRef.current = L.marker(latlng, { icon, zIndexOffset: 1000 }).addTo(mapInstance.current);
+      badgerBloodlusted.current = isBloodlusted;
+    } else {
+      badgerMarkerRef.current.setLatLng(latlng);
+      // Update icon if bloodlust state changed
+      if (badgerBloodlusted.current !== isBloodlusted) {
+        const icon = L.divIcon({
+          html: isBloodlusted ? BADGER_ICON_ANGRY : BADGER_ICON_NORMAL,
+          className: 'badger-marker',
+          iconSize: [30, 30],
+          iconAnchor: [15, 15],
+        });
+        badgerMarkerRef.current.setIcon(icon);
+        badgerBloodlusted.current = isBloodlusted;
+      }
+    }
+  }, [badgerPosition, isBloodlusted]);
 
   // Update destination marker and accuracy circle
   useEffect(() => {

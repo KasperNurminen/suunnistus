@@ -14,7 +14,7 @@ const WAYPOINTS = [
 ];
 
 // Badger speed: ~30 meters per minute
-const BADGER_SPEED_M_PER_MS = 30 / 60000;
+export const BADGER_SPEED_M_PER_MS = 30 / 60000;
 
 export const BADGER_CATCH_RADIUS = 20; // meters
 export const BADGER_IMMUNITY_MS = 5 * 60 * 1000; // 5 minutes
@@ -68,4 +68,25 @@ export function getBadgerPosition(timestampMs: number): { lat: number; lng: numb
 
   // Fallback (shouldn't reach here)
   return WAYPOINTS[0];
+}
+
+export const BLOODLUST_THRESHOLD = 7;
+
+/**
+ * Move badger from `from` toward `target` by the distance it would travel in `deltaMs`.
+ * Returns the new position, or `target` if it would overshoot.
+ */
+export function moveBadgerToward(
+  from: { lat: number; lng: number },
+  target: { lat: number; lng: number },
+  deltaMs: number
+): { lat: number; lng: number } {
+  const dist = getDistance(from.lat, from.lng, target.lat, target.lng);
+  const moveDistance = deltaMs * BADGER_SPEED_M_PER_MS;
+  if (moveDistance >= dist) return { ...target };
+  const fraction = moveDistance / dist;
+  return {
+    lat: from.lat + (target.lat - from.lat) * fraction,
+    lng: from.lng + (target.lng - from.lng) * fraction,
+  };
 }

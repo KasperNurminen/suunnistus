@@ -3,7 +3,7 @@ import { useGame } from '../context/GameContext';
 import { useGeolocation } from '../hooks/useGeolocation';
 import { useBadger } from '../hooks/useBadger';
 import { CHECKPOINTS, COLLECT_RADIUS_METERS, FINAL_DESTINATION, DESTINATION_RADIUS, MIN_CHECKPOINTS_FOR_REVEAL } from '../data/checkpoints';
-import { BADGER_CATCH_RADIUS } from '../data/badger';
+import { BADGER_CATCH_RADIUS, BLOODLUST_THRESHOLD } from '../data/badger';
 import { getDistance } from '../utils/geo';
 import { GameMap } from './GameMap';
 import { CoordinateReveal, getRevealedCoords } from './CoordinateReveal';
@@ -19,7 +19,8 @@ function formatTime(ms: number): string {
 export function ActiveGame() {
   const { state, dispatch } = useGame();
   const { position, error } = useGeolocation();
-  const { badgerPosition } = useBadger();
+  const isBloodlusted = state.collectedCheckpoints.length >= BLOODLUST_THRESHOLD;
+  const { badgerPosition } = useBadger({ playerPosition: position, isBloodlusted });
   const [elapsed, setElapsed] = useState(0);
   const [lastCollected, setLastCollected] = useState<string | null>(null);
   const lastCollectedTimer = useRef<ReturnType<typeof setTimeout>>();
@@ -153,7 +154,11 @@ export function ActiveGame() {
         <div className="badger-toast">Mäyrä sai sinut kiinni! Menetit yhden muiston.</div>
       )}
 
-      {isImmune && !badgerCaught && (
+      {isBloodlusted && !badgerCaught && (
+        <div className="bloodlust-warning">Mäyrä on raivoissaan ja jahtaa sinua!</div>
+      )}
+
+      {isImmune && !badgerCaught && !isBloodlusted && (
         <div className="immunity-badge">Mäyräsuoja aktiivinen</div>
       )}
 
@@ -166,6 +171,8 @@ export function ActiveGame() {
         collectedIds={collectedIds}
         position={position}
         destination={destination}
+        badgerPosition={badgerPosition}
+        isBloodlusted={isBloodlusted}
       />
 
       <ul className="checkpoint-list">
