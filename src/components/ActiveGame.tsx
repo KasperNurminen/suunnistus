@@ -158,7 +158,7 @@ export function ActiveGame() {
         <div className="bloodlust-warning">Mäyrä on raivoissaan ja jahtaa sinua!</div>
       )}
 
-      {isImmune && !badgerCaught && !isBloodlusted && (
+      {isImmune && !badgerCaught && (
         <div className="immunity-badge">Mäyräsuoja aktiivinen</div>
       )}
 
