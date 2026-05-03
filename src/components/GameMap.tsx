@@ -22,7 +22,7 @@ export function GameMap({ checkpoints, collectedIds, position, destination }: Ga
   const badgerMarker = useRef<L.Marker | null>(null);
   const badgerInterval = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // Initialize map
+  // Initialize map (once)
   useEffect(() => {
     if (!mapRef.current || mapInstance.current) return;
 
@@ -40,26 +40,7 @@ export function GameMap({ checkpoints, collectedIds, position, destination }: Ga
 
     L.control.zoom({ position: 'bottomright' }).addTo(map);
 
-    // Add checkpoint markers
-    for (const cp of checkpoints) {
-      const marker = L.circleMarker([cp.lat, cp.lng], {
-        radius: 12,
-        color: '#f59e0b',
-        fillColor: '#f59e0b',
-        fillOpacity: 0.3,
-        weight: 2,
-      }).addTo(map);
-
-      marker.bindTooltip(cp.name, {
-        permanent: false,
-        direction: 'top',
-        offset: [0, -10],
-      });
-
-      checkpointMarkers.current.set(cp.id, marker);
-    }
-
-    // Add badger marker — updates on its own interval, no React dependency
+    // Add badger marker
     const badgerIcon = L.divIcon({
       html: '<div class="badger-icon">🦡</div>',
       className: 'badger-marker',
@@ -86,7 +67,39 @@ export function GameMap({ checkpoints, collectedIds, position, destination }: Ga
       mapInstance.current = null;
       checkpointMarkers.current.clear();
       badgerMarker.current = null;
+      playerMarker.current = null;
+      accuracyCircle.current = null;
     };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Update checkpoint markers when positions change (e.g. wrong answer moves them)
+  useEffect(() => {
+    if (!mapInstance.current) return;
+
+    // Remove old markers
+    for (const [, marker] of checkpointMarkers.current) {
+      marker.remove();
+    }
+    checkpointMarkers.current.clear();
+
+    // Add updated markers
+    for (const cp of checkpoints) {
+      const marker = L.circleMarker([cp.lat, cp.lng], {
+        radius: 12,
+        color: '#f59e0b',
+        fillColor: '#f59e0b',
+        fillOpacity: 0.3,
+        weight: 2,
+      }).addTo(mapInstance.current);
+
+      marker.bindTooltip(cp.name, {
+        permanent: false,
+        direction: 'top',
+        offset: [0, -10],
+      });
+
+      checkpointMarkers.current.set(cp.id, marker);
+    }
   }, [checkpoints]);
 
   // Update player position
@@ -127,6 +140,12 @@ export function GameMap({ checkpoints, collectedIds, position, destination }: Ga
           color: '#4ade80',
           fillColor: '#4ade80',
           fillOpacity: 0.6,
+        });
+      } else {
+        marker.setStyle({
+          color: '#f59e0b',
+          fillColor: '#f59e0b',
+          fillOpacity: 0.3,
         });
       }
     }

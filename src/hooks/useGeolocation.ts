@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface Position {
   lat: number;
@@ -15,6 +15,7 @@ export function useGeolocation(): GeolocationState {
     position: null,
     error: null,
   });
+  const lastUpdate = useRef(0);
 
   useEffect(() => {
     if (!navigator.geolocation) {
@@ -22,20 +23,37 @@ export function useGeolocation(): GeolocationState {
       return;
     }
 
-    const watchId = navigator.geolocation.watchPosition(
-      (pos) => {
-        setState({
-          position: { lat: pos.coords.latitude, lng: pos.coords.longitude },
-          error: null,
-        });
-      },
-      (err) => {
-        setState((prev) => ({ ...prev, error: err.message }));
-      },
-      { enableHighAccuracy: true, maximumAge: 5000, timeout: 10000 }
-    );
+    const onPosition = (pos: GeolocationPosition) => {
+      lastUpdate.current = Date.now();
+      setState({
+        position: { lat: pos.coords.latitude, lng: pos.coords.longitude },
+        error: null,
+      });
+    };
 
-    return () => navigator.geolocation.clearWatch(watchId);
+    const onError = (err: GeolocationPositionError) => {
+      setState((prev) => ({ ...prev, error: err.message }));
+    };
+
+    const options: PositionOptions = {
+      enableHighAccuracy: true,
+      maximumAge: 3000,
+      timeout: 15000,
+    };
+
+    const watchId = navigator.geolocation.watchPosition(onPosition, onError, options);
+
+    // Fallback: poll getCurrentPosition if watchPosition goes silent for 10s
+    const fallback = setInterval(() => {
+      if (Date.now() - lastUpdate.current > 10000) {
+        navigator.geolocation.getCurrentPosition(onPosition, onError, options);
+      }
+    }, 5000);
+
+    return () => {
+      navigator.geolocation.clearWatch(watchId);
+      clearInterval(fallback);
+    };
   }, []);
 
   return state;
