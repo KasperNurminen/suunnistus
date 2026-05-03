@@ -135,7 +135,8 @@ export function ActiveGame() {
     [getCheckpointPos]
   );
 
-  const isImmune = state.badgerImmunityUntil !== null && Date.now() < state.badgerImmunityUntil;
+  const immuneRemaining = state.badgerImmunityUntil ? Math.max(0, state.badgerImmunityUntil - Date.now()) : 0;
+  const isImmune = immuneRemaining > 0;
 
   return (
     <div className="screen">
@@ -159,7 +160,7 @@ export function ActiveGame() {
       )}
 
       {isImmune && !badgerCaught && (
-        <div className="immunity-badge">Mäyräsuoja aktiivinen</div>
+        <div className="immunity-badge">Mäyräsuoja aktiivinen ({Math.ceil(immuneRemaining / 1000)}s)</div>
       )}
 
       <CoordinateReveal collectedCount={state.collectedCheckpoints.length} />
