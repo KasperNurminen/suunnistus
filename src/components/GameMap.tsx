@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Checkpoint } from '../types';
+import { WAYPOINTS } from '../data/badger';
 
 interface GameMapProps {
   checkpoints: Checkpoint[];
@@ -10,12 +11,13 @@ interface GameMapProps {
   destination: { lat: number; lng: number; accuracy: number } | null;
   badgerPosition: { lat: number; lng: number };
   isBloodlusted: boolean;
+  showBadgerPath?: boolean;
 }
 
 const BADGER_ICON_NORMAL = '<div class="badger-icon">🦡</div>';
 const BADGER_ICON_ANGRY = '<div class="badger-icon badger-angry">🦡</div>';
 
-export function GameMap({ checkpoints, collectedIds, position, destination, badgerPosition, isBloodlusted }: GameMapProps) {
+export function GameMap({ checkpoints, collectedIds, position, destination, badgerPosition, isBloodlusted, showBadgerPath }: GameMapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<L.Map | null>(null);
   const playerMarker = useRef<L.CircleMarker | null>(null);
@@ -25,6 +27,7 @@ export function GameMap({ checkpoints, collectedIds, position, destination, badg
   const destCircle = useRef<L.Circle | null>(null);
   const badgerMarkerRef = useRef<L.Marker | null>(null);
   const badgerBloodlusted = useRef(false);
+  const badgerPathLayer = useRef<L.Polyline | null>(null);
 
   // Initialize map (once)
   useEffect(() => {
@@ -202,6 +205,27 @@ export function GameMap({ checkpoints, collectedIds, position, destination, badg
       destCircle.current = null;
     }
   }, [destination]);
+
+  // DEV: show badger patrol path
+  useEffect(() => {
+    if (!mapInstance.current) return;
+
+    badgerPathLayer.current?.remove();
+    badgerPathLayer.current = null;
+
+    if (showBadgerPath) {
+      const pathCoords: L.LatLngExpression[] = [
+        ...WAYPOINTS.map(w => [w.lat, w.lng] as L.LatLngExpression),
+        [WAYPOINTS[0].lat, WAYPOINTS[0].lng], // close the loop
+      ];
+      badgerPathLayer.current = L.polyline(pathCoords, {
+        color: '#a855f7',
+        weight: 2,
+        dashArray: '8 6',
+        opacity: 0.6,
+      }).addTo(mapInstance.current);
+    }
+  }, [showBadgerPath]);
 
   return <div ref={mapRef} className="game-map" />;
 }

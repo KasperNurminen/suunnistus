@@ -1,17 +1,8 @@
 import { getDistance } from '../utils/geo';
+import { CHECKPOINTS } from './checkpoints';
 
-// Badger waypoints forming a loop through the checkpoint area in Mäkkylänmetsä
-const WAYPOINTS = [
-  { lat: 60.2235, lng: 24.8350 },
-  { lat: 60.2240, lng: 24.8385 },
-  { lat: 60.2235, lng: 24.8410 },
-  { lat: 60.2248, lng: 24.8400 },
-  { lat: 60.2258, lng: 24.8380 },
-  { lat: 60.2255, lng: 24.8345 },
-  { lat: 60.2248, lng: 24.8320 },
-  { lat: 60.2240, lng: 24.8335 },
-  // loops back to first waypoint
-];
+// Badger patrols from checkpoint to checkpoint
+export const WAYPOINTS = CHECKPOINTS.map(cp => ({ lat: cp.lat, lng: cp.lng }));
 
 // Badger speed: ~30 meters per minute
 export const BADGER_SPEED_M_PER_MS = 30 / 60000;

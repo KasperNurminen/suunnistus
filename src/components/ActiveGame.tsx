@@ -23,6 +23,7 @@ export function ActiveGame() {
   const isImmune = immuneRemaining > 0;
   const isBloodlusted = state.collectedCheckpoints.length >= BLOODLUST_THRESHOLD && !isImmune;
   const [devTimeMultiplier, setDevTimeMultiplier] = useState(1);
+  const [devShowBadgerPath, setDevShowBadgerPath] = useState(false);
   const { badgerPosition, teleportToPlayer } = useBadger({ playerPosition: position, isBloodlusted, timeMultiplier: devTimeMultiplier });
   const [elapsed, setElapsed] = useState(0);
   const [lastCollected, setLastCollected] = useState<string | null>(null);
@@ -174,6 +175,7 @@ export function ActiveGame() {
         destination={destination}
         badgerPosition={badgerPosition}
         isBloodlusted={isBloodlusted}
+        showBadgerPath={devShowBadgerPath}
       />
 
       <ul className="checkpoint-list">
@@ -221,6 +223,13 @@ export function ActiveGame() {
             style={{ flex: 1 }}
           >
             DEV: Speed {devTimeMultiplier}x
+          </button>
+          <button
+            className="btn-dev"
+            onClick={() => setDevShowBadgerPath(v => !v)}
+            style={{ flex: 1 }}
+          >
+            DEV: Path {devShowBadgerPath ? 'ON' : 'OFF'}
           </button>
           {isImmune && (
             <button className="btn-dev" onClick={() => dispatch({ type: 'CLEAR_IMMUNITY' })} style={{ flex: '1 1 100%' }}>
