@@ -80,8 +80,8 @@ export const COLLECT_RADIUS_METERS = 30;
 
 // Final destination
 export const FINAL_DESTINATION = {
-  lat: 60.22399814419737,
-  lng: 24.828065533305967,
+  lat: 60.2236944,
+  lng: 24.8281667,
 };
 
 export const DESTINATION_RADIUS = 10;
